@@ -20,10 +20,10 @@ $("#add-train-btn").on("click", function(event) {
     // captures user input
     var trainName = $("#train-name-input").val().trim();
     var trainDestination = $("#destination-input").val().trim();
-    var trainStart = moment($("#start-input").val().trim(), "MM/DD/YYYY").format("X");
+    var trainStart = moment($("#start-input").val().trim(), "HH:mm").format("X");
     var trainRate = $("#rate-input").val().trim();
 
-    // local object to holde train data
+    // local object to hold train data
     var newTrain = {
         name: trainName,
         destination: trainDestination,
@@ -31,7 +31,7 @@ $("#add-train-btn").on("click", function(event) {
         rate: trainRate
     };
 
-    // stores train data to database
+    // push new train data to database
     database.ref().push(newTrain);
 
     console.log(newTrain.name);
@@ -62,25 +62,51 @@ database.ref().on("child_added", function(childSnapshot) {
     console.log(trainStart);
     console.log(trainRate);
 
-    // reformat train start time for visual reasons
-    var newTrainStart = moment.unix(trainStart).format("MM/DD/YYYY");
+    // // reformat train start time 
+    // var newTrainStart = moment.unix(trainStart).format("hh:mm");
 
-    // find the minutes left until next train arrives
-    var trainMiutes = moment().diff(moment(trainStart, "X"), "minutes");
-    console.log(trainMiutes);
+    // // find the minutes left until next train arrives
+    // var trainMiutesAway = moment().diff(moment(trainStart, "X"), "minutes");
+    // console.log(trainMiutesAway);
+
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var trainStartConverted = moment(trainStart, "HH:mm").subtract(1, "years");
+    console.log(trainStartConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(trainStartConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % trainRate;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var trainMiutesAway = trainRate - tRemainder;
+    console.log("MINUTES Away: " + trainMiutesAway);
+
+    // Next Train
+    var nextTrain = moment().add(trainMiutesAway, "minutes");
+    console.log("Next Train: " + moment(nextTrain).format("hh:mm"));
+
 
     // Create new row with add train info
     var newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(trainDestination),
         $("<td>").text(trainRate),
-        $("<td>").text(newTrainStart),
-        $("<td>").text(trainMiutes),
+        $("<td>").text(nextTrain),
+        $("<td>").text(trainMiutesAway),
     );
 
     // // Append the new row to the table
     // $("#train-table > tbody").append(newRow);
-    //alt way to write above code
+
+    //alt way to append data to a table
     $("table tbody").append(newRow);
 
 });
