@@ -27,21 +27,23 @@ $(document).ready(function() {
         var trainFreq = $("#freq-input").val().trim();
 
         // local object to hold train data
-        var newTrain = {
+        var nextArrival = {
             name: trainName,
             destination: trainDestination,
             start: trainStart,
             rate: trainFreq
         };
-        console.log(newTrain)
+        console.log(nextArrival)
 
         // push new train data to database
-        database.ref().push(newTrain);
+        database.ref().push(nextArrival);
 
-        // console.log(newTrain.name);
-        // console.log(newTrain.destination);
-        // console.log(newTrain.start);
-        // console.log(newTrain.rate);
+        console.log('--------.on click & after pushed to database-------')
+        console.log(nextArrival.name);
+        console.log(nextArrival.destination);
+        console.log(nextArrival.start);
+        console.log(nextArrival.rate);
+        console.log('---------------------------')
 
         // clear text-boxes
         $("#train-name-input").val("");
@@ -62,18 +64,22 @@ $(document).ready(function() {
         var trainFreq = childSnapshot.val().rate;
 
         // check new added train info
+        console.log('');
+        console.log('-------.onclick child_added--------')
         console.log('train ' + trainName);
         console.log('destinatin ' + trainDestination);
         console.log('first train ' + trainStart);
         console.log('freq ' + trainFreq);
+        console.log('---------------------------')
+        console.log('');
 
         // // reformat train start time 
-        // var newTrainStart = moment(trainStart, 'hh:mm').format();
-        // console.log('newTrainStart ' + newTrainStart);
+        // var nextArrivalStart = moment(trainStart, 'hh:mm').format();
+        // console.log('nextArrivalStart ' + nextArrivalStart);
 
-        // // find the minutes left until next train arrives
-        // var trainMiutesAway = moment().diff(moment(trainStart, "X"), "minutes");
-        // console.log(trainMiutesAway);
+        // find the minutes left until next train arrives
+        var trainMiutesAway = moment().diff(moment(trainStart, "X"), "minutes");
+        console.log(trainMiutesAway);
 
         // First Time (pushed back 1 year to make sure it comes before current time)
         var trainStartConverted = moment(trainStart, "HH:mm").subtract(1, "years");
@@ -85,7 +91,7 @@ $(document).ready(function() {
 
         // Difference between the times
         var diffTime = moment().diff(moment(trainStartConverted), "minutes");
-        console.log("DIFFERENCE IN TIME: " + diffTime);
+        // console.log("DIFFERENCE IN TIME: " + diffTime);
 
         // Time apart (remainder)
         var tRemainder = diffTime % trainFreq;
@@ -96,16 +102,27 @@ $(document).ready(function() {
         console.log("MINUTES Away: " + trainMiutesAway);
 
         // Next Train
-        var nextTrain = moment().add(trainMiutesAway, "minutes");
-        console.log("Next Train: " + moment(nextTrain).format("hh:mm"));
+        var firstArrival = moment(trainStart, "HH:mm").add(trainFreq, "minutes").format('hh:mm');
+        var now = moment().format('hh:mm');
+        console.log("Next Train: " + moment(firstArrival, "hh:mm").format("hh:mm"));
+        console.log(now)
 
+        // var start = moment(trainStart, 'hh:mm').format('hh:mm');
+        // console.log(trainStart)
+        // var nextArrival;
+        // while (now > start) { //while ( 21:00 > 08:00 )
+        start += trainFreq; //start = start + 20
+        //     start += moment(start, "hh:mm").add(trainFreq, "minutes")
+        //     console.log(start)
+        // }
+        // console.log("Next Train: " + moment(start, "hh:mm").format("hh:mm"));
 
         // Create new row with add train info
         var newRow = $("<tr>").append(
             $("<td>").text(trainName),
             $("<td>").text(trainDestination),
             $("<td>").text(trainFreq),
-            $("<td>").text(nextTrain),
+            $("<td>").text(firstArrival),
             $("<td>").text(trainMiutesAway),
         );
 
