@@ -1,10 +1,12 @@
 // declare configures for Firebase
 var config = {
-    apiKey: "AIzaSyCs3K5zwuOuS0odq89IpPLC7HnXTOcDqgI",
-    authDomain: "recent-user-with-all-use-e8e76.firebaseapp.com",
-    databaseURL: "https://recent-user-with-all-use-e8e76.firebaseio.com",
-    projectId: "recent-user-with-all-use-e8e76",
-    storageBucket: ""
+    apiKey: "AIzaSyCvq2B_s7VI-Y2pTanD5tvWlQyieHrE27Q",
+    authDomain: "uclax-fullstack-class.firebaseapp.com",
+    databaseURL: "https://uclax-fullstack-class.firebaseio.com",
+    projectId: "uclax-fullstack-class",
+    storageBucket: "",
+    messagingSenderId: "854561901707",
+    appId: "1:854561901707:web:9807f4c7736ddde1"
 };
 
 // initialize Firebase
