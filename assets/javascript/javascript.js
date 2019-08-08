@@ -65,12 +65,10 @@ $(document).ready(function() {
 
         // check new added train info
         console.log('');
-        console.log('-------.onclick child_added--------')
-        console.log('train ' + trainName);
-        console.log('destinatin ' + trainDestination);
-        console.log('first train ' + trainStart);
-        console.log('freq ' + trainFreq);
-        console.log('---------------------------')
+        console.log('child_added train ' + trainName);
+        console.log('child_added destinatin ' + trainDestination);
+        console.log('child_added first train ' + trainStart);
+        console.log(' child_added freq ' + trainFreq);
         console.log('');
 
         // // reformat train start time 
@@ -111,7 +109,7 @@ $(document).ready(function() {
         // console.log(trainStart)
         // var nextArrival;
         // while (now > start) { //while ( 21:00 > 08:00 )
-        start += trainFreq; //start = start + 20
+        // start += trainFreq; //start = start + 20
         //     start += moment(start, "hh:mm").add(trainFreq, "minutes")
         //     console.log(start)
         // }
