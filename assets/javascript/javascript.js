@@ -54,8 +54,6 @@ $(document).ready(function() {
 
     // Firebase eventListner for adding train to the database and a row in the html when a user adds an entry
     database.ref().on("child_added", function(childSnapshot) {
-        console.log('child_added' + childSnapshot.val());
-        // console.log(childSnapshot.val().name);
 
         // Store everything into a variable.
         var trainName = childSnapshot.val().name;
@@ -64,20 +62,19 @@ $(document).ready(function() {
         var trainFreq = childSnapshot.val().rate;
 
         // check new added train info
-        console.log('');
-        console.log('child_added train ' + trainName);
-        console.log('child_added destinatin ' + trainDestination);
-        console.log('child_added first train ' + trainStart);
-        console.log(' child_added freq ' + trainFreq);
-        console.log('');
+        // console.log('child_added' + childSnapshot.val());
+        // console.log('child_added train ' + trainName);
+        // console.log('child_added destinatin ' + trainDestination);
+        // console.log('child_added first train ' + trainStart);
+        // console.log(' child_added freq ' + trainFreq);
 
-        // // reformat train start time 
+        // reformat train start time 
         // var nextArrivalStart = moment(trainStart, 'hh:mm').format();
         // console.log('nextArrivalStart ' + nextArrivalStart);
 
         // find the minutes left until next train arrives
         var trainMiutesAway = moment().diff(moment(trainStart, "X"), "minutes");
-        console.log(trainMiutesAway);
+        console.log('minutes away = ' + trainMiutesAway);
 
         // First Time (pushed back 1 year to make sure it comes before current time)
         var trainStartConverted = moment(trainStart, "HH:mm").subtract(1, "years");
@@ -85,7 +82,7 @@ $(document).ready(function() {
 
         // Current Time
         var currentTime = moment();
-        console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+        console.log("CURRENT TIME = " + moment(currentTime).format("hh:mm"));
 
         // Difference between the times
         var diffTime = moment().diff(moment(trainStartConverted), "minutes");
@@ -93,18 +90,19 @@ $(document).ready(function() {
 
         // Time apart (remainder)
         var tRemainder = diffTime % trainFreq;
-        console.log(tRemainder);
+        console.log('diffTime % trainFreq = ' + tRemainder);
 
         // Minute Until Train
         var trainMiutesAway = trainFreq - tRemainder;
-        console.log("MINUTES Away: " + trainMiutesAway);
+        console.log("MINUTES Away = " + trainMiutesAway);
 
         // Next Train
         var firstArrival = moment(trainStart, "HH:mm").add(trainFreq, "minutes").format('hh:mm');
         var now = moment().format('hh:mm');
-        console.log("Next Train: " + moment(firstArrival, "hh:mm").format("hh:mm"));
-        console.log(now)
+        console.log("Next Train = " + moment(firstArrival, "hh:mm").format("hh:mm"));
+        console.log('current time = ' + now);
 
+        //NOTE: I was trying to find next train dependent on first train & real time
         // var start = moment(trainStart, 'hh:mm').format('hh:mm');
         // console.log(trainStart)
         // var nextArrival;
@@ -124,11 +122,10 @@ $(document).ready(function() {
             $("<td>").text(trainMiutesAway),
         );
 
-        //     // // Append the new row to the table
-        //     // $("#train-table > tbody").append(newRow);
-
-        //alt way to append data to a table
+        // Append the new row to the table
         $("table tbody").append(newRow);
+        //$("#train-table > tbody").append(newRow);
+        //alt way to append data to a table
 
     });
 });
